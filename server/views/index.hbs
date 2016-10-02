@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>{{title}}</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {{#metas}}
+      <meta name="{{name}}" content="{{content}}">
+      {{#repeat_with_prefix}}
+        <meta name="{{.}}{{name}}" content="{{content}}">
+      {{/repeat_with_prefix}}
+    {{/metas}}
+    {{#jsonToClient}}
+      <script>
+        window.INITIAL_STATE = {{{jsonToClient}}};
+      </script>
+    {{/jsonToClient}}
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600" rel="stylesheet">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
