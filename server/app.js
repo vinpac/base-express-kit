@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({
 }))
 
 if (config.globals.__DEV__) {
-  require('./lib/setupWebpackServer')(app)
+  require('../dev/start')(app)
 }
 
 // set favicon
@@ -33,7 +33,7 @@ if (!config.globals.__PROD__) {
   app.set('view cache', false)
   app.use(express.static(paths.public()))
 } else {
-  app.use(express.static(paths.public(), { maxAge: 2592000000 }))
+  app.use(express.static(paths.build('public'), { maxAge: 2592000000 }))
 }
 
 app.use('/', require('./routes')())

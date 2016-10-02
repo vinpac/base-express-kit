@@ -1,13 +1,19 @@
-var config = require('.');
-var webpack = require('webpack');
-var path = require('path');
-var autoprefixer = require('autoprefixer');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
-var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-var WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
+const config = require('../config');
+const webpack = require('webpack');
+const path = require('path');
+const autoprefixer = require('autoprefixer');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
+const paths = config.paths
 
-var webpackConfig = {
+
+const __DEV__ = config.globals.__DEV__
+const __PROD__ = config.globals.__PROD__
+
+const webpackConfig = {
+
   devtool: 'eval',
   entry: [
     'webpack-hot-middleware/client?'
@@ -17,15 +23,13 @@ var webpackConfig = {
     config.compiler.entry
   ],
   output: {
-    // Next line is not used in dev but WebpackDevServer crashes without it:
     path: config.compiler.build,
-    // Add /* filename */ comments to generated require()s in the output.
-    pathinfo: true,
-    // This does not produce a real file. It's just the virtual path that is
-    // served by WebpackDevServer in development. This is the JS bundle
-    // containing code from all our entry points, and the Webpack runtime.
+    // Add /* filename */ comments to generated require()s in the output
+    // on developemnt.
+    pathinfo: __DEV__,
+    // On development it doesn't produce a real file.
     filename: 'static/js/bundle.js',
-    // This is the URL that app is served from. We use "/" in development.
+    // This is the URL that app is served from. Default is "/".
     publicPath: config.compiler.publicPath
   },
   resolve: {
@@ -41,36 +45,23 @@ var webpackConfig = {
     // https://github.com/facebookincubator/create-react-app/issues/290
     extensions: ['.js', '.json', '.jsx', '']
   },
-
   module: {
     // First, run the linter.
     // It's important to do this before Babel processes the JS.
-    // preLoaders: [
-    //   {
-    //     test: /\.(js|jsx)$/,
-    //     loader: 'eslint',
-    //     include: paths.appSrc,
-    //   }
-    // ],
+    preLoaders: [
+      {
+        test: /\.(js|jsx)$/,
+        loader: 'eslint',
+        include: paths.client(),
+      }
+    ],
+
     loaders: [
       // Process JS with Babel.
       {
         test: /\.(js|jsx)$/,
-        include: config.paths.client(),
+        include: paths.client(),
         loader: 'babel'
-      },
-      {
-        test: /\.scss$/,
-        loaders: [
-          'style',
-          'css',
-          'postcss',
-          'sass'
-        ]
-      },
-      {
-        test: /\.css$/,
-        loader: 'style!css?sourceMap&-minimize!postcss'
       },
       // JSON is not enabled by default in Webpack but both Node and Browserify
       // allow it implicitly so we also enable it.
@@ -98,11 +89,11 @@ var webpackConfig = {
           name: 'static/media/[name].[hash:8].[ext]'
         }
       }
-    ]
+    ],
   },
 
   // We use PostCSS for autoprefixing only.
-  postcss: function() {
+  postcss() {
     return [
       autoprefixer({
         browsers: [
@@ -116,10 +107,11 @@ var webpackConfig = {
   },
 
   plugins: [
-//    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.DefinePlugin(config.globals),
+    // new webpack.optimize.OccurenceOrderPlugin(),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
-      template: config.paths.server('views', 'index.hbs'),
+      template: paths.server('views', 'index.hbs'),
       hash: false,
       filename: `views/index.hbs`,
       inject: 'body',
@@ -139,8 +131,9 @@ var webpackConfig = {
     // to restart the development server for Webpack to discover it. This plugin
     // makes the discovery automatic so you don't have to restart.
     // See https://github.com/facebookincubator/create-react-app/issues/186
-    new WatchMissingNodeModulesPlugin(config.paths.base('node_modules'))
+    new WatchMissingNodeModulesPlugin(paths.base('node_modules'))
   ],
+
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
   node: {
@@ -148,6 +141,22 @@ var webpackConfig = {
     net: 'empty',
     tls: 'empty'
   }
-};
+}
+
+if (__PROD__) {
+  require('./webpack.config.prod')(webpackConfig)
+} else {
+  // non-production style
+  webpackConfig.module.loaders.push(
+    {
+      test: /\.scss$/,
+      loader: 'style!css!postcss!sass'
+    },
+    {
+      test: /\.css$/,
+      loader: 'style!css?sourceMap&-minimize!postcss'
+    }
+  )
+}
 
 module.exports = webpackConfig;

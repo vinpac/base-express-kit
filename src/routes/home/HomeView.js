@@ -3,6 +3,7 @@ import Link from 'react-router/Link'
 import Toolbar from '../../components/elements/Toolbar'
 import Footer from '../../components/elements/Footer'
 
+
 class HomeView extends React.Component {
   render() {
     return (
