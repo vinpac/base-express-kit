@@ -1,13 +1,9 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-function renderApp(params) {
-  return function (req, res, next) {
-    return res.render("index", params)
-  }
-}
+const renderApp = params => (req, res) => res.render("index", params)
 
-module.exports = function() {
+module.exports = () => {
   router
     .get('/profile', renderApp({
       title: 'Profile',

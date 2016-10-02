@@ -1,14 +1,10 @@
-var WebpackDevMiddleware = require("webpack-dev-middleware");;
-var config = require('../../config');
+const WebpackDevMiddleware = require("webpack-dev-middleware")
+const config = require('../../config')
 
-var paths = config.paths
-
-module.exports = function (compiler, publicPath) {
-  console.log('Enable webpack dev middleware.')
-
-  var middleware = WebpackDevMiddleware(compiler, {
+module.exports = (compiler, publicPath) => {
+  return WebpackDevMiddleware(compiler, {
     clientLogLevel: 'none',
-    contentBase: paths.public(),
+    contentBase: config.paths.public(),
     publicPath: publicPath,
     hot: true,
     quiet: true,
@@ -17,6 +13,4 @@ module.exports = function (compiler, publicPath) {
       ignored: /node_modules/
     }
   })
-
-  return middleware
 }
