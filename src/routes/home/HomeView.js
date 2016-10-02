@@ -5,6 +5,11 @@ import Footer from '../../components/elements/Footer'
 
 
 class HomeView extends React.Component {
+
+  componentDidMount() {
+    document.title = 'Home'
+  }
+
   render() {
     return (
       <div className="view-home">

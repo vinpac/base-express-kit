@@ -4,6 +4,10 @@ import Toolbar from '../../components/elements/Toolbar'
 import Footer from '../../components/elements/Footer'
 
 class AboutView extends React.Component {
+  componentDidMount() {
+    document.title = 'About'
+  }
+
   render() {
     return (
       <div className="view-about">

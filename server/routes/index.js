@@ -5,8 +5,8 @@ const renderApp = params => (req, res) => res.render("index", params)
 
 module.exports = () => {
   router
-    .get('/profile', renderApp({
-      title: 'Profile',
+    .get('/about', renderApp({
+      title: 'About',
       jsonToClient: JSON.stringify({ user: { id: 1, name: 'John'}}),
       metas: [
         { name: 'name', content: 'Profile 1' }
