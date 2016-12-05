@@ -13,12 +13,12 @@ class AboutView extends React.Component {
       <div className="view-about">
         <header className="header">
           <Toolbar lightMode={true}/>
-          <div className="container container-md text-xs-center content">
+          <div className="container container-md text-xs-center view-spacer">
             <div className="row">
               <div className="col-xs-12">
                 <h1 className="text-light">About View</h1>
                 <Link to="/" className="text-light text-weight-semibold">
-                  <i className="fa fa-arrow-left mg-xs-right-1" /> Go to Home
+                  <i className="fa fa-arrow-left sp-xs-right-1" /> Go to Home
                 </Link>
               </div>
             </div>

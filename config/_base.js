@@ -22,7 +22,7 @@ var config = {
   server_host: process.env.HOST || 'localhost',
   server_protocol: process.env.HTTPS === 'true' ? "https" : "http",
   server_preserve_log: false,
-  server_open_browser: true
+  server_open_browser: !process.argv.includes('--no-browser')
 }
 
 // ------------------------------------
@@ -30,7 +30,8 @@ var config = {
 // ------------------------------------
 config.globals = {
   'process.env'  : {
-    'NODE_ENV' : JSON.stringify(config.env)
+    'NODE_ENV' : JSON.stringify(config.env),
+    'API_URL': "'/api'"
   },
   'NODE_ENV'     : config.env,
   '__DEV__'      : config.env === 'development',
@@ -49,9 +50,10 @@ var paths = (function() {
   return {
     base   : base,
     client : base.bind(resolve, config.dir_client),
-    build   : base.bind(resolve, config.dir_build),
+    build  : base.bind(resolve, config.dir_build),
     server : base.bind(resolve, config.dir_server),
-    public : base.bind(resolve, config.dir_public)
+    public : base.bind(resolve, config.dir_public),
+    tools  : base.bind(resolve, 'tools'),
   }
 })();
 

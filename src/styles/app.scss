@@ -1,5 +1,9 @@
-@import 'variables';
-@import 'base';
-@import 'rebase/rebase';
-@import 'views/views';
-@import 'elements/elements';
+@import "variables";
+
+@import "~base-style/variables";
+@import "rebase/variables";
+@import "~base-style/base";
+@import "rebase/index";
+
+@import "elements/index";
+@import "views/index";

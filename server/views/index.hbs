@@ -5,17 +5,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {{#metas}}
-      <meta name="{{name}}" content="{{content}}">
+      <meta name="{{{name}}}" content="{{{content}}}">
       {{#repeat_with_prefix}}
-        <meta name="{{.}}{{name}}" content="{{content}}">
+        <meta name="{{{.}}}{{{name}}}" content="{{{content}}}">
       {{/repeat_with_prefix}}
     {{/metas}}
-    {{#jsonToClient}}
+    {{#initalState}}
       <script>
-        window.INITIAL_STATE = {{{jsonToClient}}};
+        window.INITIAL_STATE = {{{initialState}}};
       </script>
-    {{/jsonToClient}}
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600" rel="stylesheet">
+    {{/initalState}}
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   </head>
   <body>
     <div id="root"></div>

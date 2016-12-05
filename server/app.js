@@ -5,6 +5,7 @@ const express = require('express')
 const bodyParser = require("body-parser")
 const favicon = require('serve-favicon')
 const mustacheExpress = require('mustache-express')
+const cookieParser = require('cookie-parser')
 const paths = config.paths
 const app = new express()
 
@@ -14,8 +15,11 @@ app.use(bodyParser.urlencoded({
 }))
 
 if (config.globals.__DEV__) {
-  require('../dev/start')(app)
+  require('../tools/setupWebpackServer')(app)
 }
+
+// enable cookies
+app.use(cookieParser())
 
 // set favicon
 // app.use(favicon(paths.public('favicon.png')))
@@ -40,9 +44,11 @@ app.use('/', require('./routes')())
 app.use(function(err, req, res, next) {
   res.status(err.status || 500)
   res.render('index', {
-    jsonToClient: JSON.stringify({
-      message: err.message,
-      error: err
+    initialState: JSON.stringify({
+      error: {
+        message: err.message,
+        error: err
+      }
     })
   })
 })

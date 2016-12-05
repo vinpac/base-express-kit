@@ -39,14 +39,17 @@ function run(port) {
 
   server.on('listening', function() {
     clearConsole()
-    console.log('The app is running at:')
+    if (process.env.DEV_SERVER) {
+      console.log('$DEV_SERVER_START:'+config.server_host+':'+config.server_port+';\n')
+    }
+    console.log('The server is running at:')
     console.log('\n\t' + chalk.cyan(server_url) + '\n')
 
     if (!config.globals.__PROD__) {
       console.log('Note that the development build is not optimized.')
     }
 
-    if (config.globals.__DEV__) {
+    if (config.globals.__DEV__ && config.server_open_browser) {
       require('react-dev-utils/openBrowser')(server_url)
     }
   })
