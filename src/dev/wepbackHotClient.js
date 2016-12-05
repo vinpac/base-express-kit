@@ -4,7 +4,7 @@ import formatWebpackMessages from './formatWebpackMessage';
 import ansiHTML from 'ansi-html';
 import { AllHtmlEntities } from 'html-entities';
 import stripAnsi from 'strip-ansi';
-import styledLog, { joinStyledLogs } from '../utils/styled-log';
+import slog, { styles } from '../utils/styled-log';
 import { updateMostRecentCompilationHash, processUpdate } from './webpackHotProcessUpdate';
 import { options, FLAG, colors } from './wepbackHotConstants';
 
@@ -158,7 +158,7 @@ function onMessage(e) {
   switch (message.action) {
     case 'building':
       console.log()
-      console.log(...joinStyledLogs(FLAG, 'Rebuilding'))
+      console.log(...slog(FLAG, 'Rebuilding'))
       break;
     case "sync":
       isFirstCompilation = false;
@@ -181,7 +181,7 @@ function onMessage(e) {
 }
 
 function onOpen() {
-  console.log(...joinStyledLogs(FLAG, 'Connected'))
+  console.log(...slog(FLAG, 'Connected'))
 }
 
 function onError(err) {
@@ -192,7 +192,7 @@ function onError(err) {
 
 function handleSuccess(message) {
   if (!isFirstCompilation) {
-    console.log(...joinStyledLogs(FLAG, 'Built in', styledLog.bold.m(`${Date.now() - lastActivity}ms`)))
+    console.log(...slog(FLAG, 'Built in', styles.bold(`${Date.now() - lastActivity}ms`)))
   }
 
 

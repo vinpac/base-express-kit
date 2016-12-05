@@ -1,4 +1,4 @@
-import styledLog from '../utils/styled-log';
+import { styles } from '../utils/styled-log';
 
 export const HMR_DOCS_URL = "http://webpack.github.io/docs/hot-module-replacement-with-webpack.html";
 export const options = {
@@ -24,6 +24,6 @@ export const colors = {
   darkgrey: '6D7891'
 }
 
-export const FLAG = options.useFlag ? styledLog.bold.blue('[HMR]') : ''
+export const FLAG = options.useFlag ? styles.bold.blue('[HMR]') : ''
 export const failureStatuses = { abort: 1, fail: 1 };
 export const applyOptions = { ignoreUnaccepted: true };

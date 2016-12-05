@@ -6,21 +6,22 @@ export function styledLogMessage(message, style) {
 
 const styledMessageFn = style => message => styledLogMessage(message, style)
 
-export default {
+export const styles = {
   red: styledMessageFn('color: red;'),
   blue: styledMessageFn('color: blue;'),
   green: styledMessageFn('color: green;'),
   grey: styledMessageFn('color: grey;'),
 
-  bold: {
-    m: styledMessageFn('font-weight:bold;'),
-    red: styledMessageFn('color: red; font-weight:bold;'),
-    blue: styledMessageFn('color: blue; font-weight:bold;'),
-    green: styledMessageFn('color: green; font-weight:bold;'),
-  }
+  bold: styledMessageFn('font-weight:bold;')
 }
 
-export function joinStyledLogs(...args) {
+Object.assign(styles.bold, {
+  red: styledMessageFn('color: red; font-weight:bold;'),
+  green: styledMessageFn('color: green; font-weight:bold;'),
+  blue: styledMessageFn('color: blue; font-weight:bold;')
+})
+
+export default function slog(...args) {
   const messages = []
   const styles = []
   forEach(args, arg => {
@@ -38,9 +39,4 @@ export function joinStyledLogs(...args) {
   })
 
   return [messages.join(' '), ...styles]
-}
-
-export const styledConsole = {
-  warn: (...args) => console.warn(...joinStyledLogs(...args)),
-  log: (...args) => console.log(...joinStyledLogs(...args))
 }

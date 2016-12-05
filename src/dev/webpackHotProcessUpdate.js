@@ -1,6 +1,8 @@
-import styledLog, { joinStyledLogs } from '../utils/styled-log';
+import slog from '../utils/styled-log';
 import { options, FLAG, HMR_DOCS_URL, failureStatuses, applyOptions } from './wepbackHotConstants';
 import { forEach } from '../utils/object-utils';
+
+console.log(...slog(FLAG, 'Nothing hot updated.'))
 
 let mostRecentCompilationHash = null;
 
@@ -41,8 +43,8 @@ export function processUpdate(hash, moduleMap) {
     function handleApplyUpdates(err, updatedModules) {
       if (err || !updatedModules) {
         if (options.warn) {
-          console.warn(...joinStyledLogs(FLAG, "Cannot find update (Full reload needed)"));
-          console.warn(...joinStyledLogs(FLAG, "(Probably because of restarting the server)"));
+          console.warn(...slog(FLAG, "Cannot find update (Full reload needed)"));
+          console.warn(...slog(FLAG, "(Probably because of restarting the server)"));
         }
         return;
       }
@@ -89,7 +91,7 @@ export function processUpdate(hash, moduleMap) {
 
     if(unacceptedModules.length > 0) {
       if (options.warn) {
-        console.warn(...joinStyledLogs(
+        console.warn(...slog(
           FLAG,
           "The following modules couldn't be hot updated: " +
           "(Full reload needed)\n" +
@@ -99,7 +101,7 @@ export function processUpdate(hash, moduleMap) {
         ));
 
         forEach(unacceptedModules, moduleId => {
-          console.warn(...joinStyledLogs(FLAG, moduleMap[moduleId]))
+          console.warn(...slog(FLAG, moduleMap[moduleId]))
         });
       }
       performReload();
@@ -108,11 +110,11 @@ export function processUpdate(hash, moduleMap) {
 
     if (options.log) {
       if(!renewedModules || renewedModules.length === 0) {
-        console.log(...joinStyledLogs(FLAG, 'Nothing hot updated.'))
+        console.log(...slog(FLAG, 'Nothing hot updated.'))
       } else {
-        console.log(...joinStyledLogs(FLAG, 'Updated modules:'))
+        console.log(...slog(FLAG, 'Updated modules:'))
         forEach(renewedModules, moduleId => {
-          console.log(...joinStyledLogs('\t', styledLog.grey(moduleMap[moduleId])));
+          console.log(...slog('\t', slog.grey(moduleMap[moduleId])));
         })
       }
     }
@@ -122,20 +124,20 @@ export function processUpdate(hash, moduleMap) {
 export function handleError(err) {
   if (module.hot.status() in failureStatuses) {
     if (options.warn) {
-      console.warn(...joinStyledLogs(FLAG, "Cannot check for update (Full reload needed)"));
-      console.warn(...joinStyledLogs(FLAG, `${err.stack || err.message}`));
+      console.warn(...slog(FLAG, "Cannot check for update (Full reload needed)"));
+      console.warn(...slog(FLAG, `${err.stack || err.message}`));
     }
     performReload();
     return;
   }
   if (options.warn) {
-    console.warn(...joinStyledLogs(FLAG, `Update check failed: ${err.stack || err.message}`));
+    console.warn(...slog(FLAG, `Update check failed: ${err.stack || err.message}`));
   }
 }
 
 export function performReload() {
   if (options.reload) {
-    if (options.warn) console.warn(...joinStyledLogs(FLAG, "Reloading page"));
+    if (options.warn) console.warn(...slog(FLAG, "Reloading page"));
     window.location.reload();
   }
 }
